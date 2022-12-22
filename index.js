@@ -1,11 +1,11 @@
 const ProductManager = require('./clases')
-const ListaProductos = new ProductManager()
+const ListaProductos = new ProductManager("./productList.json")
 
-const hola = ListaProductos.getProducts()
-console.log(hola)
-ListaProductos.addProduct("Play Station 5", "La play 5", 50000, "link", 011, 5)
-console.log(hola)
-ListaProductos.addProduct("Play Station 5", "La play 5", 50000, "link", 011, 5)
-console.log(hola)
-ListaProductos.addProduct("Play Station 4", "La play 4", 50000, "link", 010, 5)
-console.log(hola);
+ListaProductos.addProduct("Iphone", "Telefono", 2000, "Fotito", "123", "10")
+ListaProductos.addProduct("Iphone2", "Telefono", 3000, "Fotito", "124", "10")
+const productos = ListaProductos.getProducts()
+// console.log("Todos los productos")
+// console.log(productos)
+// const producto = ListaProductos.getProductsById(1)
+// console.log("Un producto");
+// console.log(producto)

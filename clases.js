@@ -1,27 +1,15 @@
+const fs = require("fs")
 class ProductManager
 {
-    products
-    static id=0;
-    constructor()
+    static id=0
+    productList
+    constructor(path)
     {
-        this.products = []
-        
+        this.path = path
+        this.productList=[]
     }
-    addProduct = (title, description, price, thumbnail, code, stock)=>
+    addProduct=(title, description, price, thumbnail, code, stock)=>
     {
-        let include = false;
-        if(this.products.length > 0)
-        {
-            this.products.map((product)=>
-            {
-                if(product.code === code)
-                {
-                    include=true;
-                    return;
-                }
-            })
-        } 
-        if(include === false){
         const product = {
             title,
             description,
@@ -29,31 +17,52 @@ class ProductManager
             thumbnail,
             code,
             stock,
-            id: this.#getId()
+            id : this.#getId()
         }
-        this.products.push(product);
-        return("Producto Agregado correctamente")
-        }else{
-            console.log("error: ya existe un producto con ese codigo")
+        if(fs.existsSync(this.path)){
+            this.productList=this.getProducts()
+            this.productList.push(product)
+            try {
+                fs.writeFileSync(this.path, JSON.stringify(this.productList),"utf-8")
+                console.log("File written succesfully")
+            } catch (error) {
+                throw new Error(error);
+            }
+        }else
+        {
+            try {
+                fs.writeFileSync(this.path, JSON.stringify(product),"utf-8")
+                console.log("File written succesfully")
+            } catch (error) {
+                throw new Error(error);
+            }
         }
 
     }
-    getProducts = () =>
+    getProducts=()=>
     {
-        return this.products;
+        try {
+            const products = JSON.parse(fs.readFileSync(this.path, "utf-8"))
+            return products
+        } catch (error) {
+            throw new Error(error);
+        }
     }
-    getProductById = (id)=>
+    getProductsById=(id)=>
     {
-        const product=this.products.find((product)=>
-        {
-            product.id===id;
-        })
-        return product
+        try {
+            const products = [] 
+            products = JSON.parse(fs.readFileSync(this.path, "utf-8"))
+            return products.find(prod=>prod.id===id)
+            
+        } catch (error) {
+            throw new Error(error);
+        }
     }
-    #getId=()=>
+    #getId = ()=>
     {
         ProductManager.id++;
-        return ProductManager.id;
+        return ProductManager.id
     }
 
 }
