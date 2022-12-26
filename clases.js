@@ -65,13 +65,17 @@ class ProductManager
     deletById=(id)=>
     {
         const products = this.getProducts()
-        try {
-            products = products.filter(prod=>prod.id != id)
-            fs.writeFileSync(this.path, JSON.stringify(products),"utf-8")
-            console.log("Updated File");
-
-        } catch (error) {
-            throw new Error(error)
+        const product = products.find(prod=>prod.id != id)
+        if(product){
+            const index = products.indexOf(product)
+            product.splice(index,1);
+            try {
+                fs.writeFileSync(this.path, JSON.stringify(products),"utf-8")
+                console.log("Updated File");
+                
+            } catch (error) {
+                throw new Error(error)
+            }
         }
     }
     #getId = ()=>
